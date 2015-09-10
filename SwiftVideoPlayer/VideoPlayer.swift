@@ -278,7 +278,8 @@ public class VideoPlayer: NSObject {
             self.scrubberUI?.height = scrubberHeight
             
             // Scrubber min and max
-            self.scrubberUI?.maximumValue = Float(self.scrubberWidth)
+            self.scrubberUI?.minimumValue = 0
+            self.scrubberUI?.maximumValue = 100
             
             // remove thumb image
             // If the user has defined a minimal scrubber
@@ -314,7 +315,7 @@ public class VideoPlayer: NSObject {
     // Scrubber Advancement
     private func addPeriodicTimeObserver() {
         
-        let interval: CMTime = CMTimeMakeWithSeconds(0.1, Int32(Double(NSEC_PER_SEC)))
+        let interval: CMTime = CMTimeMake(1, Int32(Double(NSEC_PER_SEC)))
         
         self.player.addPeriodicTimeObserverForInterval(interval, queue: dispatch_get_main_queue()) { (CMTime) -> Void in
             self.updateScrubberWidth(CMTime)
@@ -325,17 +326,14 @@ public class VideoPlayer: NSObject {
     // Scrubber Update
     private func updateScrubberWidth(time: CMTime) {
         
-        let duration: Double = Double(CMTimeGetSeconds(self.playerItem.duration))
-        let ratio = Double(self.scrubberWidth) / duration
+        let duration: Float = Float(CMTimeGetSeconds(self.playerItem.duration))
+        let normalizedCurrenTime: Float = Float(CMTimeGetSeconds(self.playerItem.currentTime()) * 100.0)
+        
         
         if CMTimeCompare(time, kCMTimeZero) > -1 {
             
-            let currentTime: Double = Double(CMTimeGetSeconds(time))
-            let width: CGFloat = CGFloat(ceil(round(currentTime * ratio)))
-            
-            //self.scrubber.frame.size.width = width
-            
-            self.scrubberUI?.setValue(Float(width), animated: true)
+            var normalizedTime: Float =  normalizedCurrenTime / duration
+            self.scrubberUI?.value = normalizedTime
             
         }
         
@@ -402,8 +400,8 @@ public class VideoPlayer: NSObject {
         
     }
     
-    // Replace Item
-    //replaceCurrentItemWithPlayerItem
+    // TODO: Replace Item
+    // replaceCurrentItemWithPlayerItem
     
     
     //////////////////////////////////////////////////////////////////////////////////////////////
