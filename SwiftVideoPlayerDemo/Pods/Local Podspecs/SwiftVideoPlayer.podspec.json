@@ -1,0 +1,23 @@
+{
+  "name": "SwiftVideoPlayer",
+  "platforms": {
+    "ios": "8.0"
+  },
+  "summary": "SwiftVideoPlayer is a lightweight customisable video Player written in swift above AVPlayer.",
+  "requires_arc": true,
+  "version": "1.0.0",
+  "license": {
+    "type": "MIT",
+    "file": "LICENSE"
+  },
+  "authors": {
+    "Benjamin Horner": "b.e.horner@gmail.com"
+  },
+  "homepage": "https://github.com/benjaminhorner/SwiftVideoPlayer",
+  "source": {
+    "git": "https://github.com/benjaminhorner/SwiftVideoPlayer.git",
+    "tag": "1.0.0"
+  },
+  "source_files": "SwiftVideoPlayer/**/*.{swift}",
+  "resources": "SwiftVideoPlayer/**/*.{png,jpeg,jpg,storyboard,xib}"
+}

@@ -1,0 +1,19 @@
+PODS:
+  - SwiftVideoPlayer (1.0.0)
+
+DEPENDENCIES:
+  - SwiftVideoPlayer (from `https://github.com/benjaminhorner/SwiftVideoPlayer.git`)
+
+EXTERNAL SOURCES:
+  SwiftVideoPlayer:
+    :git: https://github.com/benjaminhorner/SwiftVideoPlayer.git
+
+CHECKOUT OPTIONS:
+  SwiftVideoPlayer:
+    :commit: c0349fa96e1d132eb7e239c47007a94564ee9cdd
+    :git: https://github.com/benjaminhorner/SwiftVideoPlayer.git
+
+SPEC CHECKSUMS:
+  SwiftVideoPlayer: 8866c8b66ffaa484ec6695e03fa6fd67173045ee
+
+COCOAPODS: 0.38.2

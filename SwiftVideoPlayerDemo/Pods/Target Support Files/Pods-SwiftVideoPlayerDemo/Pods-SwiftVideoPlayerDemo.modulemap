@@ -1,0 +1,6 @@
+framework module Pods_SwiftVideoPlayerDemo {
+  umbrella header "Pods-SwiftVideoPlayerDemo-umbrella.h"
+
+  export *
+  module * { export * }
+}
