@@ -3,6 +3,16 @@ SwiftVideoPlayer is a lightweight drop-in class that simplifies the usage of AVP
 It was inspired by the excellent https://github.com/piemonte/Player
 Credits to https://github.com/piemonte
 
+#INSTALLATION
+Using cocoapds simply add the following to your podfile
+``` pod 'SwiftVideoPlayer' ```
+
+then run 
+``` pod install ```
+
+Don't forget to import SwiftVideoPlayer to your project
+``` import SwiftVideoPlayer ```
+
 # USAGE
 1. include the VideoPlayerDelegate in your class
 2. instanciate the player like so :
