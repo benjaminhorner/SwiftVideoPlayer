@@ -30,6 +30,4 @@ s.source = { :git => "https://github.com/benjaminhorner/SwiftVideoPlayer.git", :
 # 7
 s.source_files = "SwiftVideoPlayer/**/*.{swift}"
 
-# 8
-s.resources = "SwiftVideoPlayer/**/*.{png,jpeg,jpg,storyboard,xib}"
 end

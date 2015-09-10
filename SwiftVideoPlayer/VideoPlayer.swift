@@ -36,7 +36,7 @@ import AVFoundation
 import Foundation
 import CoreGraphics
 
-protocol VideoPlayerDelegate {
+public protocol VideoPlayerDelegate {
     
     func playerReady(player: VideoPlayer)
     func playerPlaybackStateDidChange(player: VideoPlayer)
@@ -91,12 +91,12 @@ public enum BufferingState: Int, Printable {
 ///////////////////////////////////////////////////////////////////////////////
 // The Class
 ///////////////////////////////////////////////////////////////////////////////
-class VideoPlayer: NSObject {
+public class VideoPlayer: NSObject {
     
     
     // Enums
-    internal var playbackState = PlaybackState.Stopped
-    internal var bufferingState = BufferingState.Unknown
+    public var playbackState = PlaybackState.Stopped
+    public var bufferingState = BufferingState.Unknown
     
     
     // Player
@@ -107,18 +107,18 @@ class VideoPlayer: NSObject {
     
     
     // Delegate
-    internal var delegate: VideoPlayerDelegate?
+    public var delegate: VideoPlayerDelegate?
     
     
     // Scrubber
     private var scrubberUI: ScrubberSlider?
-    internal var scrubberPositionX: CGFloat = 0
-    internal var scrubberPositionY: CGFloat = UIScreen.mainScreen().bounds.width - 2
-    internal var scrubberHeight: CGFloat = 4
-    internal var scrubberWidth: CGFloat = UIScreen.mainScreen().bounds.width
-    internal var scrubberTintColor: UIColor = UIColor(red: 78.0/255, green: 184.0/255, blue: 87.0/255, alpha: 1.0)
-    internal var scrubberMaximumTrackTintColor: UIColor?
-    internal var minimalScrubber: Bool = true
+    public var scrubberPositionX: CGFloat = 0
+    public var scrubberPositionY: CGFloat = UIScreen.mainScreen().bounds.width - 2
+    public var scrubberHeight: CGFloat = 4
+    public var scrubberWidth: CGFloat = UIScreen.mainScreen().bounds.width
+    public var scrubberTintColor: UIColor = UIColor(red: 78.0/255, green: 184.0/255, blue: 87.0/255, alpha: 1.0)
+    public var scrubberMaximumTrackTintColor: UIColor?
+    public var minimalScrubber: Bool = true
     
     
     // Asset Data
@@ -130,13 +130,13 @@ class VideoPlayer: NSObject {
     
     
     // Defaults
-    internal var hasScrubber: Bool = true
-    internal var playerBackgroundColor: UIColor = UIColor.blackColor()
-    internal var playbackLoops: Bool = false
-    internal var playbackFreezesAtEnd: Bool = false
-    internal var showBuffering: Bool = true
-    internal var bufferSize: CGFloat = 40
-    internal var bufferActivityIndicatorViewStyle: UIActivityIndicatorViewStyle = UIActivityIndicatorViewStyle.WhiteLarge
+    public var hasScrubber: Bool = true
+    public var playerBackgroundColor: UIColor = UIColor.blackColor()
+    public var playbackLoops: Bool = false
+    public var playbackFreezesAtEnd: Bool = false
+    public var showBuffering: Bool = true
+    public var bufferSize: CGFloat = 40
+    public var bufferActivityIndicatorViewStyle: UIActivityIndicatorViewStyle = UIActivityIndicatorViewStyle.WhiteLarge
     
     
     // Can Pan Slider
@@ -169,7 +169,7 @@ class VideoPlayer: NSObject {
     
     //************************************************************//
     // MARK: Initializer
-    required init(frame: CGRect, parentView: UIView, file: String) {
+    required public init(frame: CGRect, parentView: UIView, file: String) {
         
         // Call super initializer
         super.init()
@@ -207,7 +207,7 @@ class VideoPlayer: NSObject {
     //////////////////////////////////////////////////////////////////////////////////////////////
     
     // MARK: Player actions (Play, Pause…)
-    internal func playFromBeginning() {
+    public func playFromBeginning() {
         
         self.delegate?.playerPlaybackWillStartFromBeginning(self)
         
@@ -215,13 +215,13 @@ class VideoPlayer: NSObject {
         self.play()
     }
     
-    internal func play() {
+    public func play() {
         self.player.play()
         self.playbackState = .Playing
         self.delegate?.playerPlaybackStateDidChange(self)
     }
     
-    internal func pause() {
+    public func pause() {
         
         if self.playbackState != .Playing {
             return
@@ -233,7 +233,7 @@ class VideoPlayer: NSObject {
         self.delegate?.playerPlaybackDidEnd(self)
     }
     
-    internal func seekToTime(time: CMTime) {
+    public func seekToTime(time: CMTime) {
         self.player.seekToTime(time, completionHandler: { (completed) -> Void in
             self.play()
             self.playbackState = .Playing
@@ -241,12 +241,12 @@ class VideoPlayer: NSObject {
         })
     }
     
-    internal func setToTime(time: CMTime) {
+    public func setToTime(time: CMTime) {
         self.player.seekToTime(time)
         self.pause()
     }
     
-    internal func stop() {
+    public func stop() {
         if self.playbackState == .Stopped {
             return
         }
@@ -256,7 +256,7 @@ class VideoPlayer: NSObject {
         self.delegate?.playerPlaybackStateDidChange(self)
         self.delegate?.playerPlaybackDidEnd(self)
     }
-
+    
     
     
     
@@ -332,7 +332,7 @@ class VideoPlayer: NSObject {
             
             let currentTime: Double = Double(CMTimeGetSeconds(time))
             let width: CGFloat = CGFloat(ceil(round(currentTime * ratio)))
-                        
+            
             //self.scrubber.frame.size.width = width
             
             self.scrubberUI?.setValue(Float(width), animated: true)
@@ -345,14 +345,14 @@ class VideoPlayer: NSObject {
     //////////////////////////////////////////////////////////////////////////////////////////////
     
     // MARK: Seek Video By Dragging UISlider
-    internal func seekVideoByDragging(sender: ScrubberSlider) {
+    public func seekVideoByDragging(sender: ScrubberSlider) {
         
         if (self.canPan) {
             
             // Pause the player
             self.pause()
             
-            // Get the slider value 
+            // Get the slider value
             let width: CGFloat = CGFloat(sender.value)
             
             // Get Duration and calculate ratio (multiplier)
@@ -409,7 +409,7 @@ class VideoPlayer: NSObject {
     //////////////////////////////////////////////////////////////////////////////////////////////
     
     // MARK: KVO
-    override func observeValueForKeyPath(keyPath: String, ofObject object: AnyObject, change: [NSObject : AnyObject], context: UnsafeMutablePointer<Void>) {
+    override public func observeValueForKeyPath(keyPath: String, ofObject object: AnyObject, change: [NSObject : AnyObject], context: UnsafeMutablePointer<Void>) {
         
         switch (keyPath, context) {
             
@@ -501,7 +501,7 @@ class VideoPlayer: NSObject {
             super.observeValueForKeyPath(keyPath, ofObject: object, change: change, context: context)
             
         }
-
+        
         
     }
     
@@ -520,7 +520,7 @@ class VideoPlayer: NSObject {
         self.playerItem?.addObserver(self, forKeyPath: PlayerKeepUp, options: (NSKeyValueObservingOptions.New | NSKeyValueObservingOptions.Old), context: &PlayerItemObserverContext)
         
         self.playerItem?.addObserver(self, forKeyPath: PlayerStatusKey, options: (NSKeyValueObservingOptions.New | NSKeyValueObservingOptions.Old), context: &PlayerItemObserverContext)
-
+        
     }
     
     
@@ -536,7 +536,7 @@ class VideoPlayer: NSObject {
     //////////////////////////////////////////////////////////////////////////////////////////////
     
     // MARK: NSNotifications
-    internal func playerItemDidPlayToEndTime(aNotification: NSNotification) {
+    public func playerItemDidPlayToEndTime(aNotification: NSNotification) {
         if self.playbackLoops.boolValue == true || self.playbackFreezesAtEnd.boolValue == true {
             self.player.seekToTime(kCMTimeZero)
         }
@@ -546,18 +546,18 @@ class VideoPlayer: NSObject {
         }
     }
     
-    internal func playerItemFailedToPlayToEndTime(aNotification: NSNotification) {
+    public func playerItemFailedToPlayToEndTime(aNotification: NSNotification) {
         self.playbackState = .Failed
         self.delegate?.playerPlaybackStateDidChange(self)
     }
     
-    internal func applicationWillResignActive(aNotification: NSNotification) {
+    public func applicationWillResignActive(aNotification: NSNotification) {
         if self.playbackState == .Playing {
             self.pause()
         }
     }
     
-    internal func applicationDidEnterBackground(aNotification: NSNotification) {
+    public func applicationDidEnterBackground(aNotification: NSNotification) {
         if self.playbackState == .Playing {
             self.pause()
         }
@@ -675,12 +675,12 @@ class VideoPlayer: NSObject {
 
 //////////////////////////////////////////////////////////////////////////////////////////////
 
-class ScrubberSlider : UISlider
+public class ScrubberSlider : UISlider
 {
     
-    internal var height: CGFloat = 4.0
+    public var height: CGFloat = 4.0
     
-    override func trackRectForBounds(bounds: CGRect) -> CGRect {
+    override public func trackRectForBounds(bounds: CGRect) -> CGRect {
         //keeps original origin and width, changes height, you get the idea
         let customBounds = CGRect(origin: bounds.origin, size: CGSize(width: bounds.size.width, height: self.height))
         super.trackRectForBounds(customBounds)
@@ -688,7 +688,7 @@ class ScrubberSlider : UISlider
     }
     
     //while we are here, why not change the image here as well? (bonus material)
-    override func awakeFromNib() {
+    override public func awakeFromNib() {
         self.setThumbImage(UIImage(named: "customThumb"), forState: .Normal)
         super.awakeFromNib()
     }
