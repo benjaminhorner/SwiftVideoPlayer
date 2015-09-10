@@ -5,7 +5,7 @@ Credits to https://github.com/piemonte
 
 #INSTALLATION
 Using cocoapds simply add the following to your podfile
-``` pod 'SwiftVideoPlayer' ```
+``` pod 'SwiftVideoPlayer', :git => 'https://github.com/benjaminhorner/SwiftVideoPlayer.git', :branch => 'master' ```
 
 then run 
 ``` pod install ```
