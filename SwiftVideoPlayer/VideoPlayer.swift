@@ -299,11 +299,11 @@ public class VideoPlayer: NSObject {
             self.parentView.insertSubview(self.scrubberUI!, aboveSubview: self.playerView)
             
             // Add scrubber listener (UIControlEventValueChanged on UISlider)
-            self.scrubberUI?.addTarget(self, action: "seekVideoByDragging:", forControlEvents: UIControlEvents.ValueChanged)
+            self.scrubberUI?.addTarget(self, action: "pause", forControlEvents: UIControlEvents.TouchDown)
             
             // Add targets for touch up and touchout : play() the video again
-            self.scrubberUI?.addTarget(self, action: "play", forControlEvents: UIControlEvents.TouchUpInside)
-            self.scrubberUI?.addTarget(self, action: "play", forControlEvents: UIControlEvents.TouchUpOutside)
+            self.scrubberUI?.addTarget(self, action: "seekVideoByDragging:", forControlEvents: UIControlEvents.TouchUpInside)
+            self.scrubberUI?.addTarget(self, action: "seekVideoByDragging:", forControlEvents: UIControlEvents.TouchUpOutside)
             
             // Add the periodic observer
             self.addPeriodicTimeObserver()
@@ -354,10 +354,10 @@ public class VideoPlayer: NSObject {
             let width: CGFloat = CGFloat(sender.value)
             
             // Get Duration and calculate ratio (multiplier)
-            let duration: Double = Double(CMTimeGetSeconds(self.playerItem.duration))
-            let ratio = Double(self.scrubberWidth) / duration
+            let duration: CGFloat = CGFloat(CMTimeGetSeconds(self.playerItem.duration))
+            let ratio = CGFloat(100) / duration
             
-            let newTime: Double = Double(width) / ratio
+            let newTime: CGFloat = CGFloat(width) / ratio
             
             // Calculate time
             if !isnan(newTime) && !isinf(newTime) && (newTime > 0) && (newTime < duration) {
