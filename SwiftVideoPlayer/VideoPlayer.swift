@@ -411,13 +411,13 @@ public class VideoPlayer: NSObject {
         
         switch (keyPath, context) {
             
-        case (PlayerRateKey, &PlayerObserverContext):
+        case (PlayerRateKey?, &PlayerObserverContext):
             true
             
-        case (PlayerStatusKey, &PlayerItemObserverContext):
+        case (PlayerStatusKey?, &PlayerItemObserverContext):
             true
             
-        case (PlayerKeepUp, &PlayerItemObserverContext):
+        case (PlayerKeepUp?, &PlayerItemObserverContext):
             if let item = self.playerItem {
                 self.bufferingState = .Ready
                 self.delegate?.playerBufferingStateDidChange(self)
@@ -429,7 +429,7 @@ public class VideoPlayer: NSObject {
                 }
             }
             
-            let status = (change[NSKeyValueChangeNewKey] as! NSNumber).integerValue as AVPlayerStatus.RawValue
+            let status = (change?[NSKeyValueChangeNewKey] as! NSNumber).integerValue as AVPlayerStatus.RawValue
             
             
             switch (status) {
@@ -450,7 +450,7 @@ public class VideoPlayer: NSObject {
             default:
                 true
             }
-        case (PlayerEmptyBufferKey, &PlayerItemObserverContext):
+        case (PlayerEmptyBufferKey?, &PlayerItemObserverContext):
             if let item = self.playerItem {
                 if item.playbackBufferEmpty {
                     self.bufferingState = .Delayed
@@ -459,7 +459,7 @@ public class VideoPlayer: NSObject {
                 }
             }
             
-            let status = (change[NSKeyValueChangeNewKey] as! NSNumber).integerValue as AVPlayerStatus.RawValue
+            let status = (change?[NSKeyValueChangeNewKey] as! NSNumber).integerValue as AVPlayerStatus.RawValue
             
             switch (status) {
             case AVPlayerStatus.ReadyToPlay.rawValue:
@@ -482,7 +482,7 @@ public class VideoPlayer: NSObject {
                 true
             }
             
-        case (PlayerReadyForDisplay, &PlayerLayerObserverContext):
+        case (PlayerReadyForDisplay?, &PlayerLayerObserverContext):
             if self.playerLayer.readyForDisplay {
                 
                 self.canPan = true
