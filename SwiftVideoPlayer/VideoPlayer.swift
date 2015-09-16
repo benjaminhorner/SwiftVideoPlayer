@@ -47,7 +47,7 @@ public protocol VideoPlayerDelegate {
 }
 
 // ENUMS
-public enum PlaybackState: Int, Printable {
+public enum PlaybackState: Int, CustomStringConvertible {
     case Stopped = 0
     case Playing
     case Paused
@@ -69,7 +69,7 @@ public enum PlaybackState: Int, Printable {
     }
 }
 
-public enum BufferingState: Int, Printable {
+public enum BufferingState: Int, CustomStringConvertible {
     case Unknown = 0
     case Ready
     case Delayed
@@ -332,7 +332,7 @@ public class VideoPlayer: NSObject {
         
         if CMTimeCompare(time, kCMTimeZero) > -1 {
             
-            var normalizedTime: Float =  normalizedCurrenTime / duration
+            let normalizedTime: Float =  normalizedCurrenTime / duration
             self.scrubberUI?.value = normalizedTime
             
         }
@@ -394,8 +394,8 @@ public class VideoPlayer: NSObject {
     private func setupAVPlayerLayer(frame: CGRect) {
         
         self.playerLayer = AVPlayerLayer(player: self.player)
-        self.playerLayer.backgroundColor = self.playerBackgroundColor.CGColor!
-        self.playerLayer.fillMode = AVLayerVideoGravityResizeAspect
+        self.playerLayer.backgroundColor = self.playerBackgroundColor.CGColor
+        self.playerLayer.fillMode = AVLayerVideoGravityResizeAspectFill
         self.playerLayer.frame = frame
         
     }
@@ -407,7 +407,7 @@ public class VideoPlayer: NSObject {
     //////////////////////////////////////////////////////////////////////////////////////////////
     
     // MARK: KVO
-    override public func observeValueForKeyPath(keyPath: String, ofObject object: AnyObject, change: [NSObject : AnyObject], context: UnsafeMutablePointer<Void>) {
+    override public func observeValueForKeyPath(keyPath: String?, ofObject object: AnyObject?, change: [String : AnyObject]?, context: UnsafeMutablePointer<Void>) {
         
         switch (keyPath, context) {
             
@@ -509,15 +509,15 @@ public class VideoPlayer: NSObject {
     // MARK: Observers
     private func addObservers() {
         
-        self.player.addObserver(self, forKeyPath: PlayerRateKey, options: (NSKeyValueObservingOptions.New | NSKeyValueObservingOptions.Old) , context: &PlayerObserverContext)
+        self.player.addObserver(self, forKeyPath: PlayerRateKey, options: ([NSKeyValueObservingOptions.New, NSKeyValueObservingOptions.Old]) , context: &PlayerObserverContext)
         
-        self.playerLayer.addObserver(self, forKeyPath: PlayerReadyForDisplay, options: (NSKeyValueObservingOptions.New | NSKeyValueObservingOptions.Old), context: &PlayerLayerObserverContext)
+        self.playerLayer.addObserver(self, forKeyPath: PlayerReadyForDisplay, options: ([NSKeyValueObservingOptions.New, NSKeyValueObservingOptions.Old]), context: &PlayerLayerObserverContext)
         
-        self.playerItem?.addObserver(self, forKeyPath: PlayerEmptyBufferKey, options: (NSKeyValueObservingOptions.New | NSKeyValueObservingOptions.Old), context: &PlayerItemObserverContext)
+        self.playerItem?.addObserver(self, forKeyPath: PlayerEmptyBufferKey, options: ([NSKeyValueObservingOptions.New, NSKeyValueObservingOptions.Old]), context: &PlayerItemObserverContext)
         
-        self.playerItem?.addObserver(self, forKeyPath: PlayerKeepUp, options: (NSKeyValueObservingOptions.New | NSKeyValueObservingOptions.Old), context: &PlayerItemObserverContext)
+        self.playerItem?.addObserver(self, forKeyPath: PlayerKeepUp, options: ([NSKeyValueObservingOptions.New, NSKeyValueObservingOptions.Old]), context: &PlayerItemObserverContext)
         
-        self.playerItem?.addObserver(self, forKeyPath: PlayerStatusKey, options: (NSKeyValueObservingOptions.New | NSKeyValueObservingOptions.Old), context: &PlayerItemObserverContext)
+        self.playerItem?.addObserver(self, forKeyPath: PlayerStatusKey, options: ([NSKeyValueObservingOptions.New, NSKeyValueObservingOptions.Old]), context: &PlayerItemObserverContext)
         
     }
     
