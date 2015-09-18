@@ -230,7 +230,6 @@ public class VideoPlayer: NSObject {
         self.player.pause()
         self.playbackState = .Stopped
         self.delegate?.playerPlaybackStateDidChange(self)
-        self.delegate?.playerPlaybackDidEnd(self)
     }
     
     public func seekToTime(time: CMTime) {
