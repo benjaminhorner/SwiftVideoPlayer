@@ -399,8 +399,13 @@ public class VideoPlayer: NSObject {
         
     }
     
-    // TODO: Replace Item
-    // replaceCurrentItemWithPlayerItem
+    
+    // MARK: Replace current AVPlayerItem
+    public func replacePlayerItemWithNewItemFromURL(url: NSURL) {
+    
+        self.player.replaceCurrentItemWithPlayerItem(AVPlayerItem(URL: url))
+    
+    }
     
     
     //////////////////////////////////////////////////////////////////////////////////////////////
