@@ -401,9 +401,10 @@ public class VideoPlayer: NSObject {
     
     
     // MARK: Replace current AVPlayerItem
-    public func replacePlayerItemWithNewItemFromURL(url: NSURL) {
-    
-        self.player.replaceCurrentItemWithPlayerItem(AVPlayerItem(URL: url))
+    public func replacePlayerItemWithNewItemFromURL(url: String) {
+        
+        let nsurl = NSURL(string: url)
+        self.player.replaceCurrentItemWithPlayerItem(AVPlayerItem(URL: nsurl!))
     
     }
     
