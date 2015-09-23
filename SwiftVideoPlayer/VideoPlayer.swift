@@ -100,10 +100,10 @@ public class VideoPlayer: NSObject {
     
     
     // Player
-    private var player: AVPlayer!
-    private var playerItem: AVPlayerItem!
-    private var playerLayer: AVPlayerLayer!
-    private var playerView: UIView!
+    private weak var player: AVPlayer!
+    private weak var playerItem: AVPlayerItem!
+    private weak var playerLayer: AVPlayerLayer!
+    private weak var playerView: UIView!
     
     
     // Delegate
@@ -659,6 +659,9 @@ public class VideoPlayer: NSObject {
     // MARK: Deinit
     deinit {
         
+        self.player = nil
+        self.playerItem = nil
+        self.playerView = nil
         self.playerLayer = nil
         self.delegate = nil
         
