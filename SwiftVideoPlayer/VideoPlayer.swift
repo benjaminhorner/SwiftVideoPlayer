@@ -100,10 +100,10 @@ public class VideoPlayer: NSObject {
     
     
     // Player
-    private weak var player: AVPlayer!
-    private weak var playerItem: AVPlayerItem!
-    private weak var playerLayer: AVPlayerLayer!
-    private weak var playerView: UIView!
+    private var player: AVPlayer!
+    private var playerItem: AVPlayerItem!
+    private var playerLayer: AVPlayerLayer!
+    private var playerView: UIView!
     
     
     // Delegate
@@ -395,6 +395,7 @@ public class VideoPlayer: NSObject {
         self.playerLayer = AVPlayerLayer(player: self.player)
         self.playerLayer.backgroundColor = self.playerBackgroundColor.CGColor
         self.playerLayer.fillMode = AVLayerVideoGravityResizeAspectFill
+        self.playerLayer.videoGravity = AVLayerVideoGravityResizeAspectFill
         self.playerLayer.frame = frame
         
     }
@@ -405,7 +406,7 @@ public class VideoPlayer: NSObject {
         
         let nsurl = NSURL(string: url)
         self.player.replaceCurrentItemWithPlayerItem(AVPlayerItem(URL: nsurl!))
-    
+        
     }
     
     
@@ -533,6 +534,13 @@ public class VideoPlayer: NSObject {
         
         self.player.removeObserver(self, forKeyPath: PlayerRateKey, context: &PlayerObserverContext)
         
+        
+        self.playerItem?.removeObserver(self, forKeyPath: PlayerEmptyBufferKey, context: &PlayerItemObserverContext)
+        
+        self.playerItem?.removeObserver(self, forKeyPath: PlayerKeepUp, context: &PlayerItemObserverContext)
+        
+        self.playerItem?.removeObserver(self, forKeyPath: PlayerStatusKey, context: &PlayerItemObserverContext)
+        
     }
     
     
@@ -657,19 +665,17 @@ public class VideoPlayer: NSObject {
     //////////////////////////////////////////////////////////////////////////////////////////////
     
     // MARK: Deinit
-    deinit {
-        
-        self.player = nil
-        self.playerItem = nil
-        self.playerView = nil
-        self.playerLayer = nil
-        self.delegate = nil
-        
+    public func killPlayer() {
         
         self.removeNotifications()
         self.removeObservers()
         
         self.player.pause()
+        
+        self.player = nil
+        self.playerView = nil
+        self.playerLayer = nil
+        self.delegate = nil
         
     }
 }
