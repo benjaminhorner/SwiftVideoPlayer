@@ -143,7 +143,7 @@ public class VideoPlayer: NSObject {
     private var canPan: Bool = false
     
     // Buffer
-    private var buffer: UIActivityIndicatorView?
+    public var buffer: UIActivityIndicatorView?
     
     
     // KVO contexts
