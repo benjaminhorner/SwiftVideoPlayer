@@ -95,7 +95,7 @@ public class VideoPlayer: NSObject {
     
     
     // Enums
-    public var playbackState = PlaybackState.Stopped
+    public var playbackState  = PlaybackState.Stopped
     public var bufferingState = BufferingState.Unknown
     
     
@@ -103,7 +103,7 @@ public class VideoPlayer: NSObject {
     private var player: AVPlayer!
     private var playerItem: AVPlayerItem!
     private var playerLayer: AVPlayerLayer!
-    private var playerView: UIView!
+    public  var playerView: UIView!
     
     
     // Delegate
@@ -111,14 +111,14 @@ public class VideoPlayer: NSObject {
     
     
     // Scrubber
-    private var scrubberUI: ScrubberSlider?
     public var scrubberPositionX: CGFloat = 0
     public var scrubberPositionY: CGFloat = UIScreen.mainScreen().bounds.width - 2
-    public var scrubberHeight: CGFloat = 4
-    public var scrubberWidth: CGFloat = UIScreen.mainScreen().bounds.width
+    public var scrubberHeight: CGFloat    = 4
+    public var scrubberWidth: CGFloat     = UIScreen.mainScreen().bounds.width
     public var scrubberTintColor: UIColor = UIColor(red: 78.0/255, green: 184.0/255, blue: 87.0/255, alpha: 1.0)
+    public var minimalScrubber: Bool      = true
     public var scrubberMaximumTrackTintColor: UIColor?
-    public var minimalScrubber: Bool = true
+    private var scrubberUI: ScrubberSlider?
     
     
     // Asset Data
@@ -130,12 +130,12 @@ public class VideoPlayer: NSObject {
     
     
     // Defaults
-    public var hasScrubber: Bool = true
+    public var hasScrubber: Bool              = true
     public var playerBackgroundColor: UIColor = UIColor.blackColor()
-    public var playbackLoops: Bool = false
-    public var playbackFreezesAtEnd: Bool = false
-    public var showBuffering: Bool = true
-    public var bufferSize: CGFloat = 40
+    public var playbackLoops: Bool            = false
+    public var playbackFreezesAtEnd: Bool     = false
+    public var showBuffering: Bool            = true
+    public var bufferSize: CGFloat            = 40
     public var bufferActivityIndicatorViewStyle: UIActivityIndicatorViewStyle = UIActivityIndicatorViewStyle.WhiteLarge
     
     
@@ -169,12 +169,18 @@ public class VideoPlayer: NSObject {
     
     //************************************************************//
     // MARK: Initializer
-    required public init(frame: CGRect, parentView: UIView, file: String) {
+    required public init(frame: CGRect, parentView: UIView, file: String, localFile: Bool) {
         
         // Call super initializer
         super.init()
         
-        let sourceURL = NSURL(string: file)
+        var sourceURL = NSURL(string: file)
+        
+        if localFile {
+            sourceURL = NSURL.fileURLWithPath(file)
+        }
+        
+        print("sourceURL = \(sourceURL)")
         
         self.parentView = parentView
         
@@ -211,7 +217,10 @@ public class VideoPlayer: NSObject {
         
         self.delegate?.playerPlaybackWillStartFromBeginning(self)
         
-        self.player.seekToTime(kCMTimeZero)
+        if let player = self.player {
+            player.seekToTime(kCMTimeZero)
+        }
+        
         self.play()
     }
     
@@ -392,11 +401,11 @@ public class VideoPlayer: NSObject {
     // MARK: AVPlayer Layer
     private func setupAVPlayerLayer(frame: CGRect) {
         
-        self.playerLayer = AVPlayerLayer(player: self.player)
+        self.playerLayer                 = AVPlayerLayer(player: self.player)
         self.playerLayer.backgroundColor = self.playerBackgroundColor.CGColor
-        self.playerLayer.fillMode = AVLayerVideoGravityResizeAspectFill
-        self.playerLayer.videoGravity = AVLayerVideoGravityResizeAspectFill
-        self.playerLayer.frame = frame
+        self.playerLayer.fillMode        = AVLayerVideoGravityResizeAspectFill
+        self.playerLayer.videoGravity    = AVLayerVideoGravityResizeAspectFill
+        self.playerLayer.frame           = frame
         
     }
     
