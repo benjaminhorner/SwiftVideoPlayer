@@ -343,6 +343,8 @@ public class VideoPlayer: NSObject {
             let normalizedTime: Float =  normalizedCurrenTime / duration
             self.scrubberUI?.value = normalizedTime
             
+            print("self.scrubberUI?.value = \(self.scrubberUI?.value)")
+            
         }
         
     }
@@ -414,7 +416,12 @@ public class VideoPlayer: NSObject {
     public func replacePlayerItemWithNewItemFromURL(url: String) {
         
         let nsurl = NSURL(string: url)
-        self.player.replaceCurrentItemWithPlayerItem(AVPlayerItem(URL: nsurl!))
+        self.removeObservers()
+        self.removeNotifications()
+        self.playerItem = AVPlayerItem(URL: nsurl!)
+        self.player.replaceCurrentItemWithPlayerItem(self.playerItem)
+        self.addObservers()
+        self.addNotifications()
         
     }
     
@@ -680,6 +687,8 @@ public class VideoPlayer: NSObject {
         self.removeObservers()
         
         self.player.pause()
+        
+        self.playerView.removeFromSuperview()
         
         self.player = nil
         self.playerView = nil
