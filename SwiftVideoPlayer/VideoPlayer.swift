@@ -225,9 +225,11 @@ public class VideoPlayer: NSObject {
     }
     
     public func play() {
-        self.player.play()
-        self.playbackState = .Playing
-        self.delegate?.playerPlaybackStateDidChange(self)
+        if let player = self.player {
+            player.play()
+            self.playbackState = .Playing
+            self.delegate?.playerPlaybackStateDidChange(self)
+        }
     }
     
     public func pause() {
@@ -236,22 +238,30 @@ public class VideoPlayer: NSObject {
             return
         }
         
-        self.player.pause()
-        self.playbackState = .Stopped
-        self.delegate?.playerPlaybackStateDidChange(self)
+        if let player = self.player {
+            player.pause()
+            self.playbackState = .Stopped
+            self.delegate?.playerPlaybackStateDidChange(self)
+        }
     }
     
     public func seekToTime(time: CMTime) {
-        self.player.seekToTime(time, completionHandler: { (completed) -> Void in
-            self.play()
-            self.playbackState = .Playing
-            self.delegate?.playerPlaybackStateDidChange(self)
-        })
+        if let player = self.player {
+            player.seekToTime(time, completionHandler: { (completed) -> Void in
+                self.play()
+                self.playbackState = .Playing
+                self.delegate?.playerPlaybackStateDidChange(self)
+            })
+        }
+        
     }
     
     public func setToTime(time: CMTime) {
-        self.player.seekToTime(time)
-        self.pause()
+        if let player = self.player {
+            player.seekToTime(time)
+            self.pause()
+        }
+        
     }
     
     public func stop() {
@@ -259,10 +269,13 @@ public class VideoPlayer: NSObject {
             return
         }
         
-        self.player.pause()
-        self.playbackState = .Stopped
-        self.delegate?.playerPlaybackStateDidChange(self)
-        self.delegate?.playerPlaybackDidEnd(self)
+        if let player = self.player {
+            player.pause()
+            self.playbackState = .Stopped
+            self.delegate?.playerPlaybackStateDidChange(self)
+            self.delegate?.playerPlaybackDidEnd(self)
+            
+        }
     }
     
     
